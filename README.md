@@ -116,6 +116,12 @@ cloudflared tunnel --url http://localhost:5200
 O `cloudflared` mostra uma URL `https://<algo>.trycloudflare.com` que encaminha para a API local.
 Lembre de colocar a URL do front-end em `Cors:Origens`.
 
+## Front-end
+
+O front-end estático é uma cópia do repositório da dupla guardada neste repositório. A API serve os arquivos dessa pasta configurada em `Front:Pasta` (caminho relativo ao projeto `src/Pup.Api` em desenvolvimento, ou caminho absoluto em produção), o que mantém site e API na mesma origem, sem CORS.
+
+Apenas arquivos do site (`.html`, `.css`, `.js`, imagens e fontes) são servidos; arquivos internos da pasta devolvem 404. Com a API rodando, `http://localhost:5200/` abre o site, e um único túnel do Cloudflare (`cloudflared tunnel --url http://localhost:5200`) expõe site e API juntos.
+
 ## Referências usadas nos dados
 
 - Prefeitura de SJC — [Coleta de lixo é ampliada em São Francisco Xavier (2023)](https://www.sjc.sp.gov.br/noticias/2023/fevereiro/03/coleta-de-lixo-e-ampliada-em-sao-francisco-xavier/)

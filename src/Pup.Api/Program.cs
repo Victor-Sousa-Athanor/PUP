@@ -1,6 +1,8 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.StaticFiles;
+using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Pup.Api.Infra;
 using Pup.Application;
@@ -62,6 +64,40 @@ if (app.Environment.IsDevelopment())
 // Atrás do Cloudflare Tunnel o HTTPS termina no túnel; em dev usamos http direto.
 if (!app.Environment.IsDevelopment())
     app.UseHttpsRedirection();
+
+// Front estático (pasta configurada em Front:Pasta). Servido pela API: mesma origem, sem CORS e um único túnel.
+var pastaFront = cfg["Front:Pasta"];
+if (!string.IsNullOrWhiteSpace(pastaFront))
+{
+    var caminhoFront = Path.GetFullPath(Path.Combine(app.Environment.ContentRootPath, pastaFront));
+    if (Directory.Exists(caminhoFront))
+    {
+        var arquivosFront = new PhysicalFileProvider(caminhoFront);
+
+        // Só tipos de arquivo do site. Arquivos internos da pasta (README.md, ORIGEM.md...) nunca são servidos.
+        var tiposDoSite = new FileExtensionContentTypeProvider();
+        tiposDoSite.Mappings.Clear();
+        tiposDoSite.Mappings[".html"] = "text/html; charset=utf-8";
+        tiposDoSite.Mappings[".css"] = "text/css; charset=utf-8";
+        tiposDoSite.Mappings[".js"] = "text/javascript; charset=utf-8";
+        tiposDoSite.Mappings[".svg"] = "image/svg+xml";
+        tiposDoSite.Mappings[".png"] = "image/png";
+        tiposDoSite.Mappings[".jpg"] = "image/jpeg";
+        tiposDoSite.Mappings[".jpeg"] = "image/jpeg";
+        tiposDoSite.Mappings[".webp"] = "image/webp";
+        tiposDoSite.Mappings[".ico"] = "image/x-icon";
+        tiposDoSite.Mappings[".woff2"] = "font/woff2";
+
+        app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = arquivosFront });
+        app.UseStaticFiles(new StaticFileOptions { FileProvider = arquivosFront, ContentTypeProvider = tiposDoSite });
+        app.Logger.LogInformation("Front estático servido a partir de {Caminho}", caminhoFront);
+    }
+    else
+    {
+        app.Logger.LogWarning("Front:Pasta não encontrada ({Caminho}). A API sobe sem o front.", caminhoFront);
+    }
+}
+
 app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
