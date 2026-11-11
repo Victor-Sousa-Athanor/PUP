@@ -1,0 +1,111 @@
+### Portal de Utilidades Públicas — requisições de teste (Visual Studio / Rider / VS Code REST Client)
+@api = http://localhost:5200
+
+### Saúde
+GET {{api}}/health
+
+### Página inicial: últimas atualizações, destaques e contadores
+GET {{api}}/api/painel?limite=8
+
+### Busca geral (coletas, pontos, obras, manutenções e comunicados)
+GET {{api}}/api/busca?termo=quilombo
+
+### Regiões
+GET {{api}}/api/regioes
+
+### Coletas (filtros: regiaoId, modalidade=Comum|Seletiva, dia=Terca, hoje=true)
+GET {{api}}/api/coletas?modalidade=Seletiva
+
+### Coletas que passam hoje
+GET {{api}}/api/coletas?hoje=true
+
+### Pontos de descarte
+GET {{api}}/api/pontos-descarte
+
+### Obras abertas
+GET {{api}}/api/obras?abertas=true
+
+### Manutenções
+GET {{api}}/api/manutencoes
+
+### Comunicados vigentes (vigentes=false traz o histórico)
+GET {{api}}/api/comunicados
+
+### ===== Área administrativa =====
+# @name login
+POST {{api}}/api/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@pup.local",
+  "senha": "Admin@12345"
+}
+
+###
+@token = {{login.response.body.$.token}}
+
+### Nova região
+POST {{api}}/api/regioes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "nome": "Bairro de Teste",
+  "tipo": "Rural",
+  "descricao": "Criado pelo arquivo .http"
+}
+
+### Novo comunicado (regiaoId nulo = distrito inteiro)
+POST {{api}}/api/comunicados
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "titulo": "Teste de comunicado",
+  "resumo": "Resumo curto que aparece na lista.",
+  "conteudo": "Texto completo do comunicado.",
+  "categoria": "Geral",
+  "regiaoId": null,
+  "validoAte": null,
+  "destaque": false,
+  "fonteOficialUrl": "https://www.sjc.sp.gov.br/"
+}
+
+### Nova obra (pegue um regiaoId em GET /api/regioes)
+POST {{api}}/api/intervencoes
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "tipo": "Obra",
+  "titulo": "Ponte do ribeirão",
+  "descricao": "Reforma da cabeceira da ponte.",
+  "regiaoId": "00000000-0000-0000-0000-000000000000",
+  "local": "Estrada municipal, km 4",
+  "status": "Programado",
+  "dataInicio": "2026-12-01",
+  "previsaoConclusao": "2027-02-15",
+  "impactoNaVia": "Pare e siga durante o dia",
+  "fonteOficialUrl": null
+}
+
+### Atualizar situação de uma obra (troque o id)
+POST {{api}}/api/intervencoes/00000000-0000-0000-0000-000000000000/status
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "status": "EmAndamento",
+  "nota": "Máquinas no local, obra iniciada."
+}
+
+### Alterar temporariamente uma coleta (troque o id)
+PUT {{api}}/api/coletas/00000000-0000-0000-0000-000000000000/alteracao
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "situacao": "TemporariamenteAlterada",
+  "aviso": "Feriado: coleta passa para o dia seguinte.",
+  "ate": "2026-12-26"
+}

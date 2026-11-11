@@ -1,0 +1,10 @@
+bin/
+obj/
+.vs/
+*.user
+*.suo
+.idea/
+appsettings.*.local.json
+TestResults/
+# Sobras de edição pelo Cowork (podem ser apagadas)
+.fuse_hidden*

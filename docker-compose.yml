@@ -1,0 +1,15 @@
+# PostgreSQL do PUP. Porta 5433 no PC para não brigar com o Postgres do ServiZap (5432).
+services:
+  postgres:
+    image: postgres:17
+    container_name: pup-postgres
+    environment:
+      POSTGRES_USER: pup
+      POSTGRES_PASSWORD: pup
+      POSTGRES_DB: pup
+    ports:
+      - "5433:5432"
+    volumes:
+      - pup-pg:/var/lib/postgresql/data
+volumes:
+  pup-pg:

@@ -1,0 +1,25 @@
+<Project>
+  <PropertyGroup>
+    <EfVersion>10.0.12</EfVersion>
+    <AspNetVersion>10.0.12</AspNetVersion>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- Mesmas versões do ServiZap/Usimabe (já estão no cache NuGet do PC) -->
+    <!-- Dados -->
+    <PackageVersion Include="Microsoft.EntityFrameworkCore" Version="$(EfVersion)" />
+    <PackageVersion Include="Microsoft.EntityFrameworkCore.Design" Version="$(EfVersion)" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.3" />
+    <!-- Extensões -->
+    <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.Options" Version="10.0.12" />
+    <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="10.0.13" />
+    <!-- API -->
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="$(AspNetVersion)" />
+    <PackageVersion Include="Microsoft.AspNetCore.OpenApi" Version="$(AspNetVersion)" />
+    <!-- Testes -->
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
+    <PackageVersion Include="xunit" Version="2.9.3" />
+    <PackageVersion Include="xunit.runner.visualstudio" Version="3.1.4" />
+  </ItemGroup>
+</Project>

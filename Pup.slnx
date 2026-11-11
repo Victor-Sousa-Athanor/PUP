@@ -1,0 +1,12 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/Pup.Domain/Pup.Domain.csproj" />
+    <Project Path="src/Pup.Contracts/Pup.Contracts.csproj" />
+    <Project Path="src/Pup.Data/Pup.Data.csproj" />
+    <Project Path="src/Pup.Application/Pup.Application.csproj" />
+    <Project Path="src/Pup.Api/Pup.Api.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/Pup.Tests/Pup.Tests.csproj" />
+  </Folder>
+</Solution>
