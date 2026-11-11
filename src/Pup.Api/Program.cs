@@ -89,7 +89,21 @@ if (!string.IsNullOrWhiteSpace(pastaFront))
         tiposDoSite.Mappings[".woff2"] = "font/woff2";
 
         app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = arquivosFront });
-        app.UseStaticFiles(new StaticFileOptions { FileProvider = arquivosFront, ContentTypeProvider = tiposDoSite });
+        app.UseStaticFiles(new StaticFileOptions
+        {
+            FileProvider = arquivosFront,
+            ContentTypeProvider = tiposDoSite,
+            OnPrepareResponse = ctx =>
+            {
+                if (app.Environment.IsDevelopment())
+                {
+                    // Evita cache de navegador ao alterar HTML/CSS/JS em desenvolvimento.
+                    ctx.Context.Response.Headers.CacheControl = "no-store, no-cache, must-revalidate";
+                    ctx.Context.Response.Headers.Pragma = "no-cache";
+                    ctx.Context.Response.Headers.Expires = "0";
+                }
+            }
+        });
         app.Logger.LogInformation("Front estático servido a partir de {Caminho}", caminhoFront);
     }
     else
