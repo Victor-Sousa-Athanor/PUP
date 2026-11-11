@@ -1,13 +1,191 @@
 <!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#123b66"><meta name="description" content="Consulte informações demonstrativas sobre coleta de resíduos em São Francisco Xavier."><title>Coleta | Portal de Utilidades Públicas</title><link rel="stylesheet" href="assets/css/app.css"></head>
-<body data-page="services" data-category="Coleta de resíduos"><a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
-  <header class="site-header"><div class="header-top"><a class="brand" href="index.html" aria-label="Portal de Utilidades Públicas, página inicial"><span class="brand-mark" aria-hidden="true">P</span><span class="brand-copy"><strong>Portal de Utilidades Públicas</strong><small>São Francisco Xavier <span aria-hidden="true">·</span> SP</small></span></a><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav"><span class="menu-lines" aria-hidden="true"></span><span class="sr-only">Abrir menu</span></button></div><nav class="main-nav" id="main-nav" aria-label="Navegação principal"><a href="index.html">Início</a><a href="coleta.html" aria-current="page">Coleta</a><a href="obras.html">Obras</a><a href="manutencao.html">Manutenção</a><a href="comunicados.html">Comunicados</a></nav></header>
-  <main id="conteudo" class="page-wrap"><div class="breadcrumbs"><a href="index.html">Início</a><span aria-hidden="true">/</span><span aria-current="page">Coleta</span></div><div class="notice notice-demo" role="note"><span class="notice-mark" aria-hidden="true">i</span><p><strong>Dados de demonstração.</strong> Consulte a Prefeitura para confirmar dias, horários, locais e alterações de coleta.</p></div>
-    <section class="page-heading"><p class="eyebrow">Serviços públicos</p><h1>Coleta de resíduos</h1><p class="lede">Exemplos de informações sobre coleta comum, seletiva e orientações de descarte.</p></section>
-    <section class="content-section" aria-labelledby="service-list-title"><div class="section-heading section-heading-wrap"><div><h2 id="service-list-title">Serviços disponíveis</h2><p class="section-caption">Os registros abaixo são fictícios e servem apenas para demonstrar a interface.</p></div></div>
-      <form class="filter-bar service-filter" id="service-filter" role="search"><label class="field field-search"><span class="sr-only">Buscar coleta</span><span class="search-mark" aria-hidden="true"></span><input id="service-search" type="search" placeholder="Buscar por descrição ou local" autocomplete="off"></label><label class="field"><span class="sr-only">Filtrar por situação</span><select id="service-status"><option value="">Todas as situações</option><option>Programado</option><option>Em andamento</option><option>Concluído</option><option>Alterado</option><option>Cancelado</option></select></label><label class="field"><span class="sr-only">Filtrar por localidade</span><select id="service-location"><option value="">Todas as localidades</option><option>Centro</option><option>Zona rural</option><option>Estrada do Varadouro</option></select></label><button class="button button-secondary" type="reset">Limpar</button></form>
-      <p class="result-line" id="service-count" aria-live="polite"></p><div class="service-list" id="service-results"></div><p class="empty-state" id="service-empty" hidden>Nenhum serviço corresponde aos filtros selecionados.</p>
-    </section><aside class="source-note"><strong>Precisa confirmar um serviço?</strong><span>Use os canais oficiais da Prefeitura de São José dos Campos. Esta página é um protótipo acadêmico e não recebe solicitações.</span></aside>
-  </main><footer class="site-footer"><div><strong>Portal de Utilidades Públicas</strong><p>Projeto acadêmico independente. Não substitui os canais oficiais de atendimento.</p></div><span class="footer-location">São Francisco Xavier, SP</span></footer>
-  <script src="assets/js/data.js"></script><script src="assets/js/components.js"></script><script src="assets/js/pages/home.js"></script><script src="assets/js/pages/services.js"></script><script src="assets/js/pages/announcements.js"></script><script src="assets/js/app.js"></script>
-</body></html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#004997">
+  <meta name="description" content="Consulte informações demonstrativas sobre coleta de resíduos em São Francisco Xavier.">
+  <title>Coleta | Portal de Utilidades Públicas</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/prefeitura.css?v=20261111">
+  <link rel="stylesheet" href="assets/css/app.css?v=20261111">
+</head>
+<body data-page="services" data-category="Coleta de resíduos">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="cabecalho-bg">
+    <div class="cabecalho">
+      <div class="logo">
+        <div class="logo-img">
+          <a href="index.html" class="pup-brand-link" aria-label="Portal de Utilidades Públicas, página inicial">
+            <span class="pup-brasao-simbolico" aria-hidden="true">PUP</span>
+            <span class="pup-brand-texto">
+              <strong>Portal de Utilidades Públicas</strong>
+              <small>São Francisco Xavier · São José dos Campos</small>
+            </span>
+          </a>
+        </div>
+        <div class="home-barra-midias-sociais-not">
+          <div class="home-barra-midias-sociais-not-interna">
+            <span class="pup-selo-academico">Protótipo acadêmico · UNIVESP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="main-navigation" class="menu">
+      <nav class="topnav" id="main-nav" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="coleta.html" aria-current="page">Coleta</a>
+        <a href="obras.html">Obras</a>
+        <a href="manutencao.html">Manutenção</a>
+        <a href="comunicados.html">Comunicados</a>
+        <button type="button" class="icon menu-toggle" aria-expanded="false" aria-controls="main-nav">
+          <span class="sr-only">Abrir menu</span>
+          <span aria-hidden="true">☰ Menu</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="acessibilidade_geral" aria-label="Ferramentas de acessibilidade">
+    <div class="ferramentas">
+      <div class="acessibilidade">
+        <div class="acessibilidade_imprimir">
+          <button class="acessibilidade_botao" type="button" data-acessib="imprimir" title="Imprimir">
+            <span class="acessibilidade_svg" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span>
+            <h2>Imprimir</h2>
+          </button>
+        </div>
+        <div class="acessibilidade_contraste">
+          <button class="acessibilidade_botao" type="button" data-acessib="contraste" aria-pressed="false" title="Contraste">
+            <span class="acessibilidade_svg" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/></svg></span>
+            <h2>Contraste</h2>
+          </button>
+        </div>
+        <div class="acessibilidade_amais">
+          <button class="acessibilidade_botao" type="button" data-acessib="aumentar" title="Aumentar Fonte">
+            <span class="acessibilidade_svg" aria-hidden="true"><strong>A+</strong></span>
+            <h2>Aumentar</h2>
+          </button>
+        </div>
+        <div class="acessibilidade_a">
+          <button class="acessibilidade_botao" type="button" data-acessib="regular" title="Fonte Regular">
+            <span class="acessibilidade_svg" aria-hidden="true"><strong>A</strong></span>
+            <h2>Regular</h2>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main id="conteudo" class="conteudo-geral">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <ul>
+        <li><a href="index.html">Início</a> <span class="divider">&gt;</span></li>
+        <li><a href="index.html#servicos-recentes">Serviços</a> <span class="divider">&gt;</span></li>
+        <li class="active">Coleta</li>
+      </ul>
+    </nav>
+
+    <div class="int_servico_topico serv_cor4">
+      <div class="serv_topico">Coleta de resíduos</div>
+      <div class="serv_diag_cor4"></div>
+      <div class="serv_voltar_cor_flex serv_voltar_cor4">
+        <div class="serv_voltar_texto_link"><a href="index.html">← Voltar</a></div>
+      </div>
+    </div>
+
+    <div class="pup-aviso" role="note">
+      <span class="pup-aviso-icone" aria-hidden="true">i</span>
+      <p><strong>Dados de demonstração.</strong> Consulte a Prefeitura para confirmar dias, horários, locais e alterações de coleta.</p>
+    </div>
+
+    <section class="sec_serv_conteudo_box" aria-labelledby="page-title">
+      <p class="eyebrow">Serviços públicos</p>
+      <h1 id="page-title">Coleta de resíduos</h1>
+      <p>Exemplos de informações sobre coleta comum, seletiva e orientações de descarte.</p>
+    </section>
+
+    <section class="sec_serv_conteudo_box" aria-labelledby="service-list-title">
+      <div class="section-heading">
+        <div>
+          <h2 id="service-list-title">Serviços disponíveis</h2>
+          <p class="section-caption">Os registros abaixo são fictícios e servem apenas para demonstrar a interface.</p>
+        </div>
+      </div>
+      <form class="filter-bar service-filter" id="service-filter" role="search">
+        <label class="field field-search">
+          <span class="sr-only">Buscar coleta</span>
+          <span class="search-mark" aria-hidden="true"></span>
+          <input id="service-search" type="search" placeholder="Buscar por descrição ou local" autocomplete="off">
+        </label>
+        <label class="field">
+          <span class="sr-only">Filtrar por situação</span>
+          <select id="service-status">
+            <option value="">Todas as situações</option>
+            <option>Programado</option>
+            <option>Em andamento</option>
+            <option>Concluído</option>
+            <option>Alterado</option>
+            <option>Cancelado</option>
+          </select>
+        </label>
+        <label class="field">
+          <span class="sr-only">Filtrar por localidade</span>
+          <select id="service-location">
+            <option value="">Todas as localidades</option>
+            <option>Centro</option>
+            <option>Zona rural</option>
+            <option>Estrada do Varadouro</option>
+          </select>
+        </label>
+        <button class="button button-secondary" type="reset">Limpar</button>
+      </form>
+      <p class="result-line" id="service-count" aria-live="polite"></p>
+      <div class="service-list" id="service-results"></div>
+      <p class="empty-state" id="service-empty" hidden>Nenhum serviço corresponde aos filtros selecionados.</p>
+    </section>
+
+    <aside class="source-note">
+      <strong>Precisa confirmar um serviço?</strong>
+      <span>Use os canais oficiais da Prefeitura de São José dos Campos. Esta página é um protótipo acadêmico e não recebe solicitações.</span>
+    </aside>
+  </main>
+
+  <footer id="footer" class="rodape">
+    <div class="rodape-container">
+      <div class="rodape-texto">
+        <div class="end-rodape-1">
+          Portal de Utilidades Públicas<br>
+          Protótipo acadêmico independente (UNIVESP)
+        </div>
+        <div class="end-rodape-2">
+          Portal de Utilidades Públicas · Protótipo acadêmico (UNIVESP)
+        </div>
+      </div>
+      <div class="rodape-brasao">
+        <div class="rodape-texto">
+          <strong>São Francisco Xavier</strong>
+          <div>São José dos Campos · SP</div>
+        </div>
+      </div>
+      <div class="rodape-mapadosite">
+        <div class="rodape-texto">
+          <a href="comunicados.html">Comunicados demonstrativos</a>
+        </div>
+        <div class="rodape-texto">
+          Não substitui os canais oficiais da Prefeitura
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/components.js"></script>
+  <script src="assets/js/pages/home.js"></script>
+  <script src="assets/js/pages/services.js"></script>
+  <script src="assets/js/pages/announcements.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

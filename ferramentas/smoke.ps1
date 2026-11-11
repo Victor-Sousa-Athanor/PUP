@@ -63,7 +63,7 @@ foreach ($interno in @("/ORIGEM.md", "/README.md")) {
 $nomeInterno = "Front" + "Enzo"
 $publicas = @(
     "/", "/coleta.html", "/obras.html", "/manutencao.html", "/comunicados.html",
-    "/assets/css/app.css", "/assets/js/data.js", "/assets/js/app.js", "/assets/js/components.js",
+    "/assets/css/prefeitura.css", "/assets/css/app.css", "/assets/js/data.js", "/assets/js/app.js", "/assets/js/components.js",
     "/assets/js/pages/home.js", "/assets/js/pages/services.js", "/assets/js/pages/announcements.js",
     "/api/painel", "/api/portal/servicos", "/api/portal/comunicados"
 )
