@@ -9,6 +9,10 @@
     const empty = document.querySelector("#service-empty");
     const count = document.querySelector("#service-count");
     const category = document.body.dataset.category;
+    // Localidades vêm dos dados (API ou demonstração), não fixas no HTML.
+    const locations = [...new Set(root.PUP.data.services.filter((item) => item.category === category).map((item) => item.location))]
+      .sort((a, b) => a.localeCompare(b, "pt-BR"));
+    location.replaceChildren(new Option("Todas as localidades", ""), ...locations.map((value) => new Option(value, value)));
     function update() {
       const query = root.PUP.utils.normalize(search.value);
       const filtered = root.PUP.data.services.filter((item) => {
@@ -16,7 +20,8 @@
         return item.category === category && (!query || searchable.includes(query)) && (!status.value || item.status === status.value) && (!location.value || item.location === location.value);
       });
       root.PUP.components.renderList(results, filtered, root.PUP.components.serviceCard);
-      count.textContent = `${filtered.length} ${filtered.length === 1 ? "registro encontrado" : "registros encontrados"} · demonstração`;
+      const suffix = root.PUP.data.source !== "api" ? " · demonstração" : "";
+      count.textContent = `${filtered.length} ${filtered.length === 1 ? "registro encontrado" : "registros encontrados"}${suffix}`;
       empty.hidden = filtered.length !== 0;
       results.hidden = filtered.length === 0;
     }

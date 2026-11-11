@@ -37,7 +37,8 @@
     const meta = make("div", "announcement-meta");
     meta.append(make("span", "category-label", item.category), make("time", "announcement-date", root.PUP.utils.formatDate(item.publishedAt)));
     article.append(meta, make("h3", "announcement-title", item.title), make("p", "announcement-message", item.message));
-    article.append(compact ? make("span", "demo-inline", "Demonstração") : makeSource(item));
+    if (!compact) article.append(makeSource(item));
+    else if (item.isDemo) article.append(make("span", "demo-inline", "Demonstração"));
     return article;
   }
   function renderList(container, items, renderItem, compact) {

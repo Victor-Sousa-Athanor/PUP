@@ -14,7 +14,8 @@
         return (!query || searchable.includes(query)) && (!category.value || item.category === category.value);
       });
       root.PUP.components.renderList(results, filtered, root.PUP.components.announcementItem, false);
-      count.textContent = `${filtered.length} ${filtered.length === 1 ? "comunicado encontrado" : "comunicados encontrados"} · todos demonstrativos`;
+      const suffix = root.PUP.data.source !== "api" ? " · todos demonstrativos" : "";
+      count.textContent = `${filtered.length} ${filtered.length === 1 ? "comunicado encontrado" : "comunicados encontrados"}${suffix}`;
       empty.hidden = filtered.length !== 0;
       results.hidden = filtered.length === 0;
     }

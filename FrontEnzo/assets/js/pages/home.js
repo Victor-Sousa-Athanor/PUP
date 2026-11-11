@@ -16,7 +16,8 @@
         return (!query || searchable.includes(query)) && (!selectedCategory || item.category === selectedCategory);
       });
       root.PUP.components.renderList(results, filtered.slice(0, 4), root.PUP.components.serviceCard);
-      count.textContent = `${filtered.length} ${filtered.length === 1 ? "serviço encontrado" : "serviços encontrados"} · exemplos demonstrativos`;
+      const suffix = root.PUP.data.source !== "api" ? " · exemplos demonstrativos" : "";
+      count.textContent = `${filtered.length} ${filtered.length === 1 ? "serviço encontrado" : "serviços encontrados"}${suffix}`;
       empty.hidden = filtered.length !== 0;
       results.hidden = filtered.length === 0;
     }

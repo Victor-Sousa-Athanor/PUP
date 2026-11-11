@@ -1,5 +1,5 @@
 (function (root) {
-  function start() {
+  async function start() {
     const menuButton = document.querySelector(".menu-toggle");
     const nav = document.querySelector("#main-nav");
     if (menuButton && nav) {
@@ -11,6 +11,7 @@
         if (menuLabel) menuLabel.textContent = expanded ? "Abrir menu" : "Fechar menu";
       });
     }
+    if (root.PUP.ready) await root.PUP.ready;
     const page = document.body.dataset.page;
     if (page && root.PUP.pages[page]) root.PUP.pages[page].start();
   }

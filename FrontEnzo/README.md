@@ -8,6 +8,10 @@ Protótipo acadêmico de front-end para centralizar exemplos de informações so
 
 Abra `index.html` em um navegador moderno. O projeto usa HTML, CSS e JavaScript sem dependências ou etapa de build. Para testar com um servidor local, abra um terminal nesta pasta e execute `py -m http.server 5500`; depois acesse `http://localhost:5500`.
 
+## Executar com a API
+
+Com o back-end (`PortalUtilidadesPublicas`) rodando, acesse `http://localhost:5200/` — a própria API serve estes arquivos na mesma origem e entrega os dados reais em `/api/portal/servicos` e `/api/portal/comunicados`. Abrir `index.html` direto do disco (com a API parada) mostra apenas os dados de demonstração como reserva. Para apontar para outra URL da API, defina `window.PUP_API_BASE` antes de carregar `assets/js/data.js`.
+
 ## Telas
 
 - `index.html`: visão geral, atalhos, busca por serviço/categoria e comunicados recentes.
