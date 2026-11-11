@@ -6,6 +6,7 @@ public sealed record IntervencaoResumoDto(
     Guid Id,
     TipoIntervencao Tipo,
     string Titulo,
+    string Descricao,
     Guid RegiaoId,
     string RegiaoNome,
     string? Local,

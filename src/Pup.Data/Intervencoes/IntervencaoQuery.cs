@@ -69,8 +69,8 @@ public sealed class IntervencaoQuery(AppDbContext db)
 
     // Mesma regra de Intervencao.Atrasada, escrita aqui para o EF traduzir em SQL.
     private static Expression<Func<Linha, IntervencaoResumoDto>> Projetar(DateOnly hoje) => x => new IntervencaoResumoDto(
-        x.I.Id, x.I.Tipo, x.I.Titulo, x.I.RegiaoId, x.R.Nome, x.I.Local, x.I.Status, x.I.DataInicio, x.I.PrevisaoConclusao,
-        x.I.DataConclusao, x.I.ImpactoNaVia,
+        x.I.Id, x.I.Tipo, x.I.Titulo, x.I.Descricao, x.I.RegiaoId, x.R.Nome, x.I.Local, x.I.Status, x.I.DataInicio,
+        x.I.PrevisaoConclusao, x.I.DataConclusao, x.I.ImpactoNaVia,
         x.I.PrevisaoConclusao != null && x.I.PrevisaoConclusao < hoje &&
         (x.I.Status == StatusIntervencao.Programado || x.I.Status == StatusIntervencao.EmAndamento ||
          x.I.Status == StatusIntervencao.TemporariamenteAlterado),

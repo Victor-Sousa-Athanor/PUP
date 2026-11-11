@@ -18,7 +18,9 @@ $rotas = @(
     "/api/intervencoes",
     "/api/obras?abertas=true",
     "/api/manutencoes",
-    "/api/comunicados"
+    "/api/comunicados",
+    "/api/portal/servicos",
+    "/api/portal/comunicados"
 )
 
 $falhas = 0

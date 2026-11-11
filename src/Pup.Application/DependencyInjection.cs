@@ -8,6 +8,7 @@ using Pup.Application.Features.Comunicados;
 using Pup.Application.Features.Inicializacao;
 using Pup.Application.Features.Intervencoes;
 using Pup.Application.Features.Painel;
+using Pup.Application.Features.Portal;
 using Pup.Application.Features.Regioes;
 
 namespace Pup.Application;
@@ -30,6 +31,7 @@ public static class DependencyInjection
         services.AddScoped<ComunicadoService>();
         services.AddScoped<AdministradorService>();
         services.AddScoped<PainelService>();
+        services.AddScoped<PortalService>();
         services.AddScoped<DadosExemplo>();
         services.AddScoped<InicializacaoService>();
 

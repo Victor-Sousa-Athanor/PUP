@@ -7,6 +7,12 @@ GET {{api}}/health
 ### Página inicial: últimas atualizações, destaques e contadores
 GET {{api}}/api/painel?limite=8
 
+### Rotas no formato do front estático
+GET {{api}}/api/portal/servicos
+
+### Comunicados no formato do front estático
+GET {{api}}/api/portal/comunicados
+
 ### Busca geral (coletas, pontos, obras, manutenções e comunicados)
 GET {{api}}/api/busca?termo=quilombo
 
