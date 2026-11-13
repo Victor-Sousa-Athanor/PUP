@@ -5,24 +5,25 @@ manutenção e comunicados de São Francisco Xavier (São José dos Campos - SP)
 
 ## Regras (sempre)
 - C# / .NET 10. **Sem Python.** Datas e números gravados/lidos com `CultureInfo.InvariantCulture`.
-- **Nenhum controller acessa o banco.** Controller → `IDispatcher` → slice (Command/Query + Handler) → `<Entidade>Service`
-  → `<Entidade>Repo` (escrita) / `<Entidade>Query` (leitura) → `AppDbContext`.
-- Só `*Repo` e `*Query` (projeto `Pup.Data`) usam o `AppDbContext`.
-- Regras de negócio ficam no Domínio (`DomainException` com mensagem amigável — ela vai direto para a tela).
-- Nas `*Query`, filtre/ordene sobre as entidades e projete para DTO **por último** (o EF não traduz filtro depois de `new Record(...)`).
+- **Arquivos C# com no máximo 110 linhas.** Classes que crescerem devem ser divididas em `partial class` (`Classe.Assunto.cs`) — nunca crie classes gigantes com múltiplas responsabilidades.
+- **Fluxo obrigatório:** Controller → `<Entidade>Service` → `<Entidade>Repo` (escrita/exclusão) / `<Entidade>Query` (leitura simples) → `AppDbContext`.
+- **Nenhum Controller acessa Repo, Query ou `AppDbContext`** — Controllers chamam apenas Services.
+- **Somente `*Repo` e `*Query` (`Pup.Data`) acessam o `AppDbContext`.**
+- **Um trio `Service` + `Repo` + `Query` por entidade do banco.**
+- **Services nunca consomem Repos ou Queries de outras entidades** — comunicação entre entidades acontece apenas entre Services.
+- **Regras de negócio ficam nos Services (e invariantes de domínio chamadas por eles)** — nunca em `*Query` ou `*Repo` (`Query` apenas consulta sua tabela; `Repo` apenas salva/remove).
 - Todo registro publicado tem `AtualizadoEm` e, quando houver, `FonteOficialUrl` (o portal complementa os canais oficiais, não os substitui).
 - Dado inventado (seed) começa com "[Exemplo]".
-- Arquivos com mais de ~150 linhas: `partial class` em `Classe.Assunto.cs`.
 - Nomes, comentários e textos em **português**. Comentário explica o *porquê*.
 
 ## Mapa rápido
 | Onde | O quê |
 |---|---|
-| `src\Pup.Domain` | Entidades e regras (sem dependências) |
-| `src\Pup.Contracts` | DTOs/requests da API e `Rotulos` (textos pt-BR dos enums) |
-| `src\Pup.Data\<Feature>\` | `XRepo`, `XQuery`, configurações EF |
-| `src\Pup.Application\Features\<Feature>\` | `XService` + slices (`static class Slice { record Command/Query; class Handler }`) |
-| `src\Pup.Api\Controllers` | Rotas HTTP (só chamam o `IDispatcher`) |
+| `src\Pup.Domain` | Entidades e invariantes (sem dependências) |
+| `src\Pup.Contracts` | DTOs/requests da API e `Rotulos` (parcial por assunto) |
+| `src\Pup.Data\<Entidade>\` | `<Entidade>Repo`, `<Entidade>Query` (1 entidade por pasta) |
+| `src\Pup.Application\Features\<Entidade>\` | `<Entidade>Service` (`partial class` por assunto quando > 110 linhas) |
+| `src\Pup.Api\Controllers` | Rotas HTTP (chamam apenas Services) |
 
 ## Glossário
 Intervenção = obra **ou** manutenção (campo `Tipo`) · Histórico = linhas gravadas a cada mudança de situação ·

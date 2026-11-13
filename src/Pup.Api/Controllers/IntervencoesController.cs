@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Pup.Application.Abstracoes;
 using Pup.Application.Features.Intervencoes;
 using Pup.Contracts;
 using Pup.Domain.Comum;
@@ -10,13 +9,13 @@ namespace Pup.Api.Controllers;
 /// <summary>Obras e manutenções. Atalhos de leitura: GET api/obras e GET api/manutencoes.</summary>
 [ApiController]
 [Route("api/intervencoes")]
-public sealed class IntervencoesController(IDispatcher dispatcher) : ControllerBase
+public sealed class IntervencoesController(IntervencaoService service) : ControllerBase
 {
     /// <param name="abertas">true = esconde concluídas e canceladas.</param>
     [HttpGet]
     public Task<IReadOnlyList<IntervencaoResumoDto>> Listar([FromQuery] TipoIntervencao? tipo, [FromQuery] StatusIntervencao? status,
         [FromQuery] Guid? regiaoId, [FromQuery] string? termo, [FromQuery] bool abertas = false, CancellationToken ct = default) =>
-        dispatcher.QueryAsync(new ListarIntervencoes.Query(new FiltroIntervencoes(tipo, status, regiaoId, termo, abertas)), ct);
+        service.ListarAsync(new FiltroIntervencoes(tipo, status, regiaoId, termo, abertas), ct);
 
     [HttpGet("/api/obras")]
     public Task<IReadOnlyList<IntervencaoResumoDto>> Obras([FromQuery] StatusIntervencao? status, [FromQuery] Guid? regiaoId,
@@ -31,13 +30,13 @@ public sealed class IntervencoesController(IDispatcher dispatcher) : ControllerB
     /// <summary>Detalhe com o histórico de atualizações.</summary>
     [HttpGet("{id:guid}")]
     public Task<IntervencaoDetalheDto> Obter(Guid id, CancellationToken ct) =>
-        dispatcher.QueryAsync(new ObterIntervencao.Query(id), ct);
+        service.ObterAsync(id, ct);
 
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<IdResponse>> Criar(CriarIntervencaoRequest r, CancellationToken ct)
     {
-        var id = await dispatcher.SendAsync(new CriarIntervencao.Command(r), ct);
+        var id = await service.CriarAsync(r, ct);
         return Created($"/api/intervencoes/{id}", new IdResponse(id));
     }
 
@@ -45,7 +44,7 @@ public sealed class IntervencoesController(IDispatcher dispatcher) : ControllerB
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Atualizar(Guid id, AtualizarIntervencaoRequest r, CancellationToken ct)
     {
-        await dispatcher.SendAsync(new AtualizarIntervencao.Command(id, r), ct);
+        await service.AtualizarAsync(id, r, ct);
         return NoContent();
     }
 
@@ -53,13 +52,13 @@ public sealed class IntervencoesController(IDispatcher dispatcher) : ControllerB
     [Authorize]
     [HttpPost("{id:guid}/status")]
     public async Task<IdResponse> MudarStatus(Guid id, MudarStatusRequest r, CancellationToken ct) =>
-        new(await dispatcher.SendAsync(new MudarStatusIntervencao.Command(id, r), ct));
+        new(await service.MudarStatusAsync(id, r, ct));
 
     [Authorize]
     [HttpDelete("{id:guid}")]
     public async Task<IActionResult> Remover(Guid id, CancellationToken ct)
     {
-        await dispatcher.SendAsync(new RemoverIntervencao.Command(id), ct);
+        await service.RemoverAsync(id, ct);
         return NoContent();
     }
 }

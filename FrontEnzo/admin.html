@@ -1,0 +1,515 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#004997">
+  <meta name="description" content="Área administrativa para cadastro e atualização de coletas, pontos de descarte, obras, manutenções, comunicados e regiões.">
+  <title>Área Administrativa | Portal de Utilidades Públicas</title>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap">
+  <link rel="stylesheet" href="assets/css/prefeitura.css?v=20261112">
+  <link rel="stylesheet" href="assets/css/app.css?v=20261112">
+</head>
+<body data-page="admin">
+  <a class="skip-link" href="#conteudo">Pular para o conteúdo</a>
+
+  <header class="cabecalho-bg">
+    <div class="cabecalho">
+      <div class="logo">
+        <div class="logo-img">
+          <a href="index.html" class="pup-brand-link" aria-label="Portal de Utilidades Públicas, página inicial">
+            <span class="pup-brasao-simbolico" aria-hidden="true">PUP</span>
+            <span class="pup-brand-texto">
+              <strong>Portal de Utilidades Públicas</strong>
+              <small>São Francisco Xavier · Área Administrativa</small>
+            </span>
+          </a>
+        </div>
+        <div class="home-barra-midias-sociais-not">
+          <div class="home-barra-midias-sociais-not-interna">
+            <span class="pup-selo-academico">Protótipo acadêmico · UNIVESP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div id="main-navigation" class="menu">
+      <nav class="topnav" id="main-nav" aria-label="Navegação principal">
+        <a href="index.html">Início</a>
+        <a href="coleta.html">Coleta</a>
+        <a href="obras.html">Obras</a>
+        <a href="manutencao.html">Manutenção</a>
+        <a href="comunicados.html">Comunicados</a>
+        <a href="admin.html" aria-current="page">Administração</a>
+        <button type="button" class="icon menu-toggle" aria-expanded="false" aria-controls="main-nav">
+          <span class="sr-only">Abrir menu</span>
+          <span aria-hidden="true">☰ Menu</span>
+        </button>
+      </nav>
+    </div>
+  </header>
+
+  <section class="acessibilidade_geral" aria-label="Ferramentas de acessibilidade">
+    <div class="ferramentas">
+      <div class="acessibilidade">
+        <div class="acessibilidade_imprimir">
+          <button class="acessibilidade_botao" type="button" data-acessib="imprimir" title="Imprimir">
+            <span class="acessibilidade_svg" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></span>
+            <h2>Imprimir</h2>
+          </button>
+        </div>
+        <div class="acessibilidade_contraste">
+          <button class="acessibilidade_botao" type="button" data-acessib="contraste" aria-pressed="false" title="Contraste">
+            <span class="acessibilidade_svg" aria-hidden="true"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 3v18a9 9 0 0 0 0-18z" fill="currentColor"/></svg></span>
+            <h2>Contraste</h2>
+          </button>
+        </div>
+        <div class="acessibilidade_amais">
+          <button class="acessibilidade_botao" type="button" data-acessib="aumentar" title="Aumentar Fonte">
+            <span class="acessibilidade_svg" aria-hidden="true"><strong>A+</strong></span>
+            <h2>Aumentar</h2>
+          </button>
+        </div>
+        <div class="acessibilidade_a">
+          <button class="acessibilidade_botao" type="button" data-acessib="regular" title="Fonte Regular">
+            <span class="acessibilidade_svg" aria-hidden="true"><strong>A</strong></span>
+            <h2>Regular</h2>
+          </button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main id="conteudo" class="conteudo-geral">
+    <nav class="breadcrumb" aria-label="Navegação estrutural">
+      <ul>
+        <li><a href="index.html">Início</a> <span class="divider">&gt;</span></li>
+        <li class="active">Administração</li>
+      </ul>
+    </nav>
+
+    <div class="int_servico_topico serv_cor1">
+      <div class="serv_topico">Painel Administrativo</div>
+      <div class="serv_diag_cor1"></div>
+      <div class="serv_voltar_cor_flex serv_voltar_cor1">
+        <div class="serv_voltar_texto_link"><a href="index.html">← Voltar ao portal</a></div>
+      </div>
+    </div>
+
+    <div id="admin-feedback" class="admin-alert" role="status" aria-live="polite" hidden></div>
+
+    <section id="admin-login-section" class="admin-login-box" aria-labelledby="login-title">
+      <p class="eyebrow">Acesso restrito</p>
+      <h2 id="login-title">Entrar como administrador</h2>
+      <p class="admin-login-hint">Informe o e-mail e a senha configurados na API para inserir, alterar ou excluir registros de cada aba do portal.</p>
+      <form id="admin-login-form" class="admin-form">
+        <label class="field field-full">
+          <span class="field-label">E-mail</span>
+          <input id="login-email" type="email" required autocomplete="username" placeholder="admin@pup.local">
+        </label>
+        <label class="field field-full">
+          <span class="field-label">Senha</span>
+          <input id="login-senha" type="password" required autocomplete="current-password" placeholder="Digite sua senha">
+        </label>
+        <div class="field-full admin-actions">
+          <button class="button button-primary" type="submit">Entrar</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="admin-workspace" hidden aria-label="Gerenciamento de conteúdo">
+      <div class="admin-session-bar">
+        <div>
+          <strong>Sessão ativa:</strong> <span id="admin-user-name">Administrador</span>
+          <span class="section-caption" id="admin-token-expiry"></span>
+        </div>
+        <div class="admin-actions">
+          <button type="button" class="button button-secondary button-sm" id="admin-refresh-all">Recarregar dados</button>
+          <button type="button" class="button button-danger button-sm" id="admin-logout">Sair</button>
+        </div>
+      </div>
+
+      <div class="admin-tabs" role="tablist" aria-label="Abas administrativas">
+        <button type="button" class="admin-tab" role="tab" id="tab-btn-coleta" aria-selected="true" aria-controls="panel-coleta" data-tab="coleta">Coleta e Pontos</button>
+        <button type="button" class="admin-tab" role="tab" id="tab-btn-obras" aria-selected="false" aria-controls="panel-obras" data-tab="obras">Obras</button>
+        <button type="button" class="admin-tab" role="tab" id="tab-btn-manutencao" aria-selected="false" aria-controls="panel-manutencao" data-tab="manutencao">Manutenção</button>
+        <button type="button" class="admin-tab" role="tab" id="tab-btn-comunicados" aria-selected="false" aria-controls="panel-comunicados" data-tab="comunicados">Comunicados</button>
+        <button type="button" class="admin-tab" role="tab" id="tab-btn-regioes" aria-selected="false" aria-controls="panel-regioes" data-tab="regioes">Regiões</button>
+      </div>
+
+      <!-- ABA COLETA E PONTOS DE DESCARTE -->
+      <section id="panel-coleta" class="admin-panel" role="tabpanel" aria-labelledby="tab-btn-coleta">
+        <div class="admin-card">
+          <div class="section-heading">
+            <h2 id="coleta-form-title">Nova coleta de resíduos</h2>
+            <a class="text-link" href="coleta.html" target="_blank" rel="noopener">Abrir aba Coleta ↗</a>
+          </div>
+          <form id="form-coleta" class="admin-form">
+            <input type="hidden" id="coleta-id">
+            <label class="field">
+              <span class="field-label">Região *</span>
+              <select id="coleta-regiao" data-regiao-select required></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Modalidade *</span>
+              <select id="coleta-modalidade" required>
+                <option value="Comum">Coleta comum</option>
+                <option value="Seletiva">Coleta seletiva</option>
+              </select>
+            </label>
+            <div class="field field-full">
+              <span class="field-label">Dias da semana *</span>
+              <div class="admin-checkbox-row" id="coleta-dias">
+                <label class="admin-checkbox-item"><input type="checkbox" value="Domingo"> Domingo</label>
+                <label class="admin-checkbox-item"><input type="checkbox" value="Segunda"> Segunda</label>
+                <label class="admin-checkbox-item"><input type="checkbox" value="Terca"> Terça</label>
+                <label class="admin-checkbox-item"><input type="checkbox" value="Quarta"> Quarta</label>
+                <label class="admin-checkbox-item"><input type="checkbox" value="Quinta"> Quinta</label>
+                <label class="admin-checkbox-item"><input type="checkbox" value="Sexta"> Sexta</label>
+                <label class="admin-checkbox-item"><input type="checkbox" value="Sabado"> Sábado</label>
+              </div>
+            </div>
+            <label class="field">
+              <span class="field-label">Horário inicial *</span>
+              <input id="coleta-inicio" type="time" required value="07:00">
+            </label>
+            <label class="field">
+              <span class="field-label">Horário final *</span>
+              <input id="coleta-fim" type="time" required value="11:00">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Observação</span>
+              <input id="coleta-observacao" type="text" maxlength="500" placeholder="Ex.: Colocar o lixo até 7h em sacos fechados">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Fonte oficial (URL http/https)</span>
+              <input id="coleta-fonte" type="url" maxlength="500" placeholder="https://www.sjc.sp.gov.br/...">
+            </label>
+            <div class="field-full admin-actions">
+              <button type="submit" class="button button-primary" id="coleta-submit">Salvar coleta</button>
+              <button type="button" class="button button-secondary" id="coleta-cancelar" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Coletas cadastradas</h3>
+          <div id="lista-coletas" class="admin-list"></div>
+        </div>
+
+        <div class="admin-card">
+          <h2 id="ponto-form-title">Novo ponto de descarte</h2>
+          <form id="form-ponto" class="admin-form">
+            <input type="hidden" id="ponto-id">
+            <label class="field">
+              <span class="field-label">Nome do ponto *</span>
+              <input id="ponto-nome" type="text" maxlength="150" required placeholder="Ex.: Abrigo ecológico da Praça">
+            </label>
+            <label class="field">
+              <span class="field-label">Tipo *</span>
+              <select id="ponto-tipo" required>
+                <option value="AbrigoEcologico">Abrigo ecológico</option>
+                <option value="LixeiraComunitaria">Lixeira comunitária</option>
+                <option value="Ecoponto">Ecoponto</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">Região *</span>
+              <select id="ponto-regiao" data-regiao-select required></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Endereço / Referência *</span>
+              <input id="ponto-referencia" type="text" maxlength="300" required placeholder="Ex.: Em frente à capela">
+            </label>
+            <label class="field">
+              <span class="field-label">Latitude (opcional)</span>
+              <input id="ponto-lat" type="number" step="any" min="-90" max="90" placeholder="-22.9100">
+            </label>
+            <label class="field">
+              <span class="field-label">Longitude (opcional)</span>
+              <input id="ponto-lng" type="number" step="any" min="-180" max="180" placeholder="-45.9500">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Orientações de uso</span>
+              <textarea id="ponto-orientacoes" maxlength="1000" placeholder="O que pode ou não ser descartado no local"></textarea>
+            </label>
+            <label class="field">
+              <span class="field-label">Fonte oficial (URL)</span>
+              <input id="ponto-fonte" type="url" maxlength="500" placeholder="https://www.sjc.sp.gov.br/...">
+            </label>
+            <label class="field" id="ponto-ativo-wrap">
+              <span class="field-label">Situação do ponto</span>
+              <span class="admin-checkbox-item"><input id="ponto-ativo" type="checkbox" checked> Ativo no portal público</span>
+            </label>
+            <div class="field-full admin-actions">
+              <button type="submit" class="button button-primary" id="ponto-submit">Salvar ponto</button>
+              <button type="button" class="button button-secondary" id="ponto-cancelar" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Pontos de descarte cadastrados</h3>
+          <div id="lista-pontos" class="admin-list"></div>
+        </div>
+      </section>
+
+      <!-- ABA OBRAS -->
+      <section id="panel-obras" class="admin-panel" role="tabpanel" aria-labelledby="tab-btn-obras" hidden>
+        <div class="admin-card">
+          <div class="section-heading">
+            <h2 id="obra-form-title">Nova obra</h2>
+            <a class="text-link" href="obras.html" target="_blank" rel="noopener">Abrir aba Obras ↗</a>
+          </div>
+          <form id="form-obra" class="admin-form">
+            <input type="hidden" id="obra-id">
+            <label class="field">
+              <span class="field-label">Título *</span>
+              <input id="obra-titulo" type="text" maxlength="200" required placeholder="Ex.: Recuperação de drenagem">
+            </label>
+            <label class="field">
+              <span class="field-label">Região *</span>
+              <select id="obra-regiao" data-regiao-select required></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Local / Via</span>
+              <input id="obra-local" type="text" maxlength="300" placeholder="Ex.: Rua XV de Novembro, altura nº 120">
+            </label>
+            <label class="field" id="obra-status-wrap">
+              <span class="field-label">Situação inicial *</span>
+              <select id="obra-status">
+                <option value="Programado">Programado</option>
+                <option value="EmAndamento">Em andamento</option>
+                <option value="TemporariamenteAlterado">Alterado</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">Data de início</span>
+              <input id="obra-inicio" type="date">
+            </label>
+            <label class="field">
+              <span class="field-label">Previsão de conclusão</span>
+              <input id="obra-previsao" type="date">
+            </label>
+            <label class="field">
+              <span class="field-label">Impacto na via</span>
+              <input id="obra-impacto" type="text" maxlength="300" placeholder="Ex.: Meia pista durante o dia">
+            </label>
+            <label class="field">
+              <span class="field-label">Fonte oficial (URL)</span>
+              <input id="obra-fonte" type="url" maxlength="500" placeholder="https://www.sjc.sp.gov.br/...">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Descrição *</span>
+              <textarea id="obra-descricao" maxlength="2000" required placeholder="Descreva os serviços previstos nesta obra"></textarea>
+            </label>
+            <div class="field-full admin-actions">
+              <button type="submit" class="button button-primary" id="obra-submit">Salvar obra</button>
+              <button type="button" class="button button-secondary" id="obra-cancelar" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Obras cadastradas</h3>
+          <div id="lista-obras" class="admin-list"></div>
+        </div>
+      </section>
+
+      <!-- ABA MANUTENÇÃO -->
+      <section id="panel-manutencao" class="admin-panel" role="tabpanel" aria-labelledby="tab-btn-manutencao" hidden>
+        <div class="admin-card">
+          <div class="section-heading">
+            <h2 id="manutencao-form-title">Nova manutenção</h2>
+            <a class="text-link" href="manutencao.html" target="_blank" rel="noopener">Abrir aba Manutenção ↗</a>
+          </div>
+          <form id="form-manutencao" class="admin-form">
+            <input type="hidden" id="manutencao-id">
+            <label class="field">
+              <span class="field-label">Título *</span>
+              <input id="manutencao-titulo" type="text" maxlength="200" required placeholder="Ex.: Nivelamento de estrada rural">
+            </label>
+            <label class="field">
+              <span class="field-label">Região *</span>
+              <select id="manutencao-regiao" data-regiao-select required></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Local / Via</span>
+              <input id="manutencao-local" type="text" maxlength="300" placeholder="Ex.: Km 4 da Estrada do Varadouro">
+            </label>
+            <label class="field" id="manutencao-status-wrap">
+              <span class="field-label">Situação inicial *</span>
+              <select id="manutencao-status">
+                <option value="Programado">Programado</option>
+                <option value="EmAndamento">Em andamento</option>
+                <option value="TemporariamenteAlterado">Alterado</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">Data de início</span>
+              <input id="manutencao-inicio" type="date">
+            </label>
+            <label class="field">
+              <span class="field-label">Previsão de conclusão</span>
+              <input id="manutencao-previsao" type="date">
+            </label>
+            <label class="field">
+              <span class="field-label">Impacto na via</span>
+              <input id="manutencao-impacto" type="text" maxlength="300" placeholder="Ex.: Trânsito lento com máquinas na pista">
+            </label>
+            <label class="field">
+              <span class="field-label">Fonte oficial (URL)</span>
+              <input id="manutencao-fonte" type="url" maxlength="500" placeholder="https://www.sjc.sp.gov.br/...">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Descrição *</span>
+              <textarea id="manutencao-descricao" maxlength="2000" required placeholder="Descreva a manutenção preventiva ou corretiva"></textarea>
+            </label>
+            <div class="field-full admin-actions">
+              <button type="submit" class="button button-primary" id="manutencao-submit">Salvar manutenção</button>
+              <button type="button" class="button button-secondary" id="manutencao-cancelar" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Manutenções cadastradas</h3>
+          <div id="lista-manutencao" class="admin-list"></div>
+        </div>
+      </section>
+
+      <!-- ABA COMUNICADOS -->
+      <section id="panel-comunicados" class="admin-panel" role="tabpanel" aria-labelledby="tab-btn-comunicados" hidden>
+        <div class="admin-card">
+          <div class="section-heading">
+            <h2 id="comunicado-form-title">Novo comunicado</h2>
+            <a class="text-link" href="comunicados.html" target="_blank" rel="noopener">Abrir aba Comunicados ↗</a>
+          </div>
+          <form id="form-comunicado" class="admin-form">
+            <input type="hidden" id="comunicado-id">
+            <label class="field">
+              <span class="field-label">Título *</span>
+              <input id="comunicado-titulo" type="text" maxlength="200" required placeholder="Ex.: Alteração na coleta de feriado">
+            </label>
+            <label class="field">
+              <span class="field-label">Categoria *</span>
+              <select id="comunicado-categoria" required>
+                <option value="Geral">Geral</option>
+                <option value="Coleta">Coleta</option>
+                <option value="Obras">Obras</option>
+                <option value="Manutencao">Manutenção</option>
+                <option value="Alerta">Alerta</option>
+              </select>
+            </label>
+            <label class="field">
+              <span class="field-label">Região (em branco = distrito inteiro)</span>
+              <select id="comunicado-regiao" data-regiao-select data-regiao-opcional="true"></select>
+            </label>
+            <label class="field">
+              <span class="field-label">Válido até (opcional)</span>
+              <input id="comunicado-validade" type="date">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Resumo curto *</span>
+              <input id="comunicado-resumo" type="text" maxlength="300" required placeholder="Resumo exibido nos destaques">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Conteúdo completo *</span>
+              <textarea id="comunicado-conteudo" maxlength="4000" required placeholder="Texto completo do comunicado exibido aos moradores"></textarea>
+            </label>
+            <label class="field">
+              <span class="field-label">Fonte oficial (URL)</span>
+              <input id="comunicado-fonte" type="url" maxlength="500" placeholder="https://www.sjc.sp.gov.br/...">
+            </label>
+            <label class="field">
+              <span class="field-label">Exibição</span>
+              <span class="admin-checkbox-item"><input id="comunicado-destaque" type="checkbox"> Exibir como destaque na página inicial</span>
+            </label>
+            <div class="field-full admin-actions">
+              <button type="submit" class="button button-primary" id="comunicado-submit">Salvar comunicado</button>
+              <button type="button" class="button button-secondary" id="comunicado-cancelar" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Comunicados cadastrados</h3>
+          <div id="lista-comunicados" class="admin-list"></div>
+        </div>
+      </section>
+
+      <!-- ABA REGIÕES -->
+      <section id="panel-regioes" class="admin-panel" role="tabpanel" aria-labelledby="tab-btn-regioes" hidden>
+        <div class="admin-card">
+          <div class="section-heading">
+            <h2 id="regiao-form-title">Nova região / estrada</h2>
+            <a class="text-link" href="index.html" target="_blank" rel="noopener">Abrir Início ↗</a>
+          </div>
+          <form id="form-regiao" class="admin-form">
+            <input type="hidden" id="regiao-id">
+            <label class="field">
+              <span class="field-label">Nome da região *</span>
+              <input id="regiao-nome" type="text" maxlength="120" required placeholder="Ex.: Estrada do Roncador">
+            </label>
+            <label class="field">
+              <span class="field-label">Tipo *</span>
+              <select id="regiao-tipo" required>
+                <option value="Urbana">Urbana</option>
+                <option value="Rural">Rural</option>
+              </select>
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Descrição (opcional)</span>
+              <input id="regiao-descricao" type="text" maxlength="500" placeholder="Trecho ou referência geográfica">
+            </label>
+            <label class="field field-full">
+              <span class="admin-checkbox-item"><input id="regiao-ativa" type="checkbox" checked> Região ativa (para ocultar sem perder vínculos, desmarque e salve)</span>
+            </label>
+            <div class="field-full admin-actions">
+              <button type="submit" class="button button-primary" id="regiao-submit">Salvar região</button>
+              <button type="button" class="button button-secondary" id="regiao-cancelar" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Regiões cadastradas</h3>
+          <div id="lista-regioes" class="admin-list"></div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer id="footer" class="rodape">
+    <div class="rodape-container">
+      <div class="rodape-texto">
+        <div class="end-rodape-1">
+          Portal de Utilidades Públicas<br>
+          Protótipo acadêmico independente (UNIVESP)
+        </div>
+        <div class="end-rodape-2">
+          Portal de Utilidades Públicas · Protótipo acadêmico (UNIVESP)
+        </div>
+      </div>
+      <div class="rodape-brasao">
+        <div class="rodape-texto">
+          <strong>São Francisco Xavier</strong>
+          <div>São José dos Campos · SP</div>
+        </div>
+      </div>
+      <div class="rodape-mapadosite">
+        <div class="rodape-texto">
+          <a href="index.html">Voltar ao portal público</a>
+        </div>
+        <div class="rodape-texto">
+          Não substitui os canais oficiais da Prefeitura
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <script src="assets/js/data.js"></script>
+  <script src="assets/js/pages/admin.js"></script>
+  <script src="assets/js/app.js"></script>
+</body>
+</html>

@@ -2,14 +2,15 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Pup.Application.Comum;
 using Pup.Application.Features.Acesso;
-using Pup.Data;
+using Pup.Application.Features.Regioes;
 
 namespace Pup.Application.Features.Inicializacao;
 
 /// <summary>Executado uma vez na subida da API: prepara o banco, cria o admin inicial e os dados de exemplo.</summary>
 public sealed class InicializacaoService(
-    BancoRepo banco,
+    BancoService banco,
     AdministradorService administradores,
+    RegiaoService regioes,
     DadosExemplo exemplos,
     IOptions<PupOptions> options,
     ILogger<InicializacaoService> logger)
@@ -24,7 +25,7 @@ public sealed class InicializacaoService(
         else if (string.IsNullOrWhiteSpace(opcoes.AdminInicial.Senha))
             logger.LogWarning("Pup:AdminInicial não configurado. Defina e-mail e senha para conseguir entrar na área administrativa.");
 
-        if (opcoes.SemearDadosExemplo && !await banco.TemRegioesAsync(ct))
+        if (opcoes.SemearDadosExemplo && !await regioes.ExisteAlgumaAsync(ct))
         {
             await exemplos.SemearAsync(ct);
             logger.LogInformation("Dados de exemplo de São Francisco Xavier criados.");

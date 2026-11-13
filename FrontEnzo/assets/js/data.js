@@ -50,6 +50,6 @@
   }
   root.PUP = root.PUP || {};
   root.PUP.data = data;
-  root.PUP.utils = { normalize, formatDate };
+  root.PUP.utils = { normalize, formatDate, apiBase };
   root.PUP.ready = load();
 })(window);

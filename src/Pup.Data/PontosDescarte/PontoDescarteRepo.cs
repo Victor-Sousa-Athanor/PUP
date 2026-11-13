@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Pup.Data.Comum;
 using Pup.Domain.Coleta;
 
-namespace Pup.Data.Coleta;
+namespace Pup.Data.PontosDescarte;
 
 public sealed class PontoDescarteRepo(AppDbContext db) : RepoBase<PontoDescarte>(db)
 {

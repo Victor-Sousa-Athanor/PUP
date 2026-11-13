@@ -1,21 +1,63 @@
 using Pup.Application.Comum;
+using Pup.Application.Features.AtualizacoesIntervencao;
+using Pup.Application.Features.Regioes;
 using Pup.Contracts;
 using Pup.Data.Intervencoes;
-using Pup.Data.Regioes;
+using Pup.Domain.Comum;
 using Pup.Domain.Intervencoes;
 
 namespace Pup.Application.Features.Intervencoes;
 
 /// <summary>Obras e serviços de manutenção (mesma entidade, separadas pelo campo Tipo).</summary>
-public sealed class IntervencaoService(IntervencaoRepo repo, IntervencaoQuery query, RegiaoRepo regioes, IRelogio relogio)
+public sealed partial class IntervencaoService(
+    IntervencaoRepo repo,
+    IntervencaoQuery query,
+    RegiaoService regioes,
+    AtualizacaoIntervencaoService atualizacoes,
+    IRelogio relogio)
 {
-    public Task<IReadOnlyList<IntervencaoResumoDto>> ListarAsync(FiltroIntervencoes filtro, CancellationToken ct) =>
-        query.ListarAsync(filtro, relogio.Hoje, ct: ct);
+    public async Task<IReadOnlyList<IntervencaoResumoDto>> ListarAsync(FiltroIntervencoes f, CancellationToken ct = default)
+    {
+        var itens = await query.ListarAsync(f.Tipo, f.Status, f.RegiaoId, ct);
+        var mapaRegioes = await regioes.ObterMapaAsync(ct);
+        var hoje = relogio.Hoje;
 
-    public async Task<IntervencaoDetalheDto> ObterAsync(Guid id, CancellationToken ct) =>
-        await query.ObterAsync(id, relogio.Hoje, ct) ?? throw NaoEncontrada();
+        IEnumerable<IntervencaoResumoDto> resultado = itens
+            .Where(i => !f.SomenteAbertas || EstaAberta(i.Status))
+            .Select(i => MapearResumo(i, mapaRegioes, hoje));
 
-    public async Task<Guid> CriarAsync(CriarIntervencaoRequest r, CancellationToken ct)
+        if (!string.IsNullOrWhiteSpace(f.Termo))
+        {
+            var termo = f.Termo.Trim();
+            resultado = resultado.Where(x => ContemTermo(x, termo));
+        }
+
+        return resultado
+            .OrderBy(x => Prioridade(x.Status))
+            .ThenByDescending(x => x.AtualizadoEm)
+            .ToList();
+    }
+
+    public async Task<IntervencaoDetalheDto> ObterAsync(Guid id, CancellationToken ct = default)
+    {
+        var i = await query.ObterAsync(id, ct) ?? throw NaoEncontrada();
+        var regiao = await regioes.ObterAsync(i.RegiaoId, ct);
+        var historico = await atualizacoes.ListarPorIntervencaoAsync(id, ct);
+
+        return new IntervencaoDetalheDto(
+            i.Id, i.Tipo, i.Titulo, i.Descricao, i.RegiaoId, regiao.Nome, i.Local, i.Status,
+            i.DataInicio, i.PrevisaoConclusao, i.DataConclusao, i.ImpactoNaVia, i.Atrasada(relogio.Hoje),
+            i.FonteOficialUrl, i.CriadoEm, i.AtualizadoEm, historico);
+    }
+
+    public async Task<int> ContarAsync(TipoIntervencao tipo, bool somenteEmAndamento, CancellationToken ct = default)
+    {
+        var status = somenteEmAndamento ? StatusIntervencao.EmAndamento : (StatusIntervencao?)null;
+        var itens = await query.ListarAsync(tipo, status, null, ct);
+        return somenteEmAndamento ? itens.Count : itens.Count(i => EstaAberta(i.Status));
+    }
+
+    public async Task<Guid> CriarAsync(CriarIntervencaoRequest r, CancellationToken ct = default)
     {
         await regioes.GarantirExisteAsync(r.RegiaoId, ct);
         var i = Intervencao.Criar(r.Tipo, r.Titulo, r.Descricao, r.RegiaoId, r.Local, r.Status, r.DataInicio,
@@ -25,7 +67,7 @@ public sealed class IntervencaoService(IntervencaoRepo repo, IntervencaoQuery qu
         return i.Id;
     }
 
-    public async Task AtualizarAsync(Guid id, AtualizarIntervencaoRequest r, CancellationToken ct)
+    public async Task AtualizarAsync(Guid id, AtualizarIntervencaoRequest r, CancellationToken ct = default)
     {
         var i = await CarregarAsync(id, ct);
         await regioes.GarantirExisteAsync(r.RegiaoId, ct);
@@ -33,7 +75,7 @@ public sealed class IntervencaoService(IntervencaoRepo repo, IntervencaoQuery qu
         await repo.SalvarAsync(ct);
     }
 
-    public async Task<Guid> MudarStatusAsync(Guid id, MudarStatusRequest r, CancellationToken ct)
+    public async Task<Guid> MudarStatusAsync(Guid id, MudarStatusRequest r, CancellationToken ct = default)
     {
         var i = await CarregarAsync(id, ct);
         var atualizacao = i.MudarStatus(r.Status, r.Nota, relogio.Hoje);
@@ -41,7 +83,7 @@ public sealed class IntervencaoService(IntervencaoRepo repo, IntervencaoQuery qu
         return atualizacao.Id;
     }
 
-    public async Task RemoverAsync(Guid id, CancellationToken ct)
+    public async Task RemoverAsync(Guid id, CancellationToken ct = default)
     {
         repo.Remover(await CarregarAsync(id, ct));
         await repo.SalvarAsync(ct);

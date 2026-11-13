@@ -1,6 +1,5 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Pup.Application.Abstracoes;
 using Pup.Application.Features.Regioes;
 using Pup.Contracts;
 
@@ -8,21 +7,21 @@ namespace Pup.Api.Controllers;
 
 [ApiController]
 [Route("api/regioes")]
-public sealed class RegioesController(IDispatcher dispatcher) : ControllerBase
+public sealed class RegioesController(RegiaoService service) : ControllerBase
 {
     [HttpGet]
     public Task<IReadOnlyList<RegiaoDto>> Listar([FromQuery] bool incluirInativas = false, CancellationToken ct = default) =>
-        dispatcher.QueryAsync(new ListarRegioes.Query(incluirInativas), ct);
+        service.ListarAsync(incluirInativas, ct);
 
     [HttpGet("{id:guid}")]
     public Task<RegiaoDto> Obter(Guid id, CancellationToken ct) =>
-        dispatcher.QueryAsync(new ObterRegiao.Query(id), ct);
+        service.ObterAsync(id, ct);
 
     [Authorize]
     [HttpPost]
     public async Task<ActionResult<IdResponse>> Criar(SalvarRegiaoRequest r, CancellationToken ct)
     {
-        var id = await dispatcher.SendAsync(new CriarRegiao.Command(r), ct);
+        var id = await service.CriarAsync(r, ct);
         return Created($"/api/regioes/{id}", new IdResponse(id));
     }
 
@@ -31,7 +30,7 @@ public sealed class RegioesController(IDispatcher dispatcher) : ControllerBase
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Atualizar(Guid id, SalvarRegiaoRequest r, CancellationToken ct)
     {
-        await dispatcher.SendAsync(new AtualizarRegiao.Command(id, r), ct);
+        await service.AtualizarAsync(id, r, ct);
         return NoContent();
     }
 }

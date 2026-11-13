@@ -8,9 +8,9 @@ namespace Pup.Application.Features.Acesso;
 /// <summary>Dados mínimos do administrador logado (o token JWT é gerado na API).</summary>
 public sealed record AdministradorAutenticado(Guid Id, string Nome, string Email);
 
-public sealed class AdministradorService(AdministradorRepo repo, SenhaHasher hasher)
+public sealed class AdministradorService(AdministradorRepo repo, AdministradorQuery query, SenhaHasher hasher)
 {
-    public async Task<AdministradorAutenticado> AutenticarAsync(string? email, string? senha, CancellationToken ct)
+    public async Task<AdministradorAutenticado> AutenticarAsync(string? email, string? senha, CancellationToken ct = default)
     {
         if (string.IsNullOrWhiteSpace(email) || string.IsNullOrWhiteSpace(senha)) throw new NaoAutenticadoException();
 
@@ -19,7 +19,6 @@ public sealed class AdministradorService(AdministradorRepo repo, SenhaHasher has
         catch (DomainException) { throw new NaoAutenticadoException(); }
 
         var admin = await repo.ObterPorEmailAsync(emailNormalizado, ct);
-        // Mesma mensagem para e-mail inexistente e senha errada (não revela quais e-mails existem).
         if (admin is null || !admin.Ativo || !hasher.Verificar(senha, admin.SenhaHash))
             throw new NaoAutenticadoException();
 
@@ -29,9 +28,9 @@ public sealed class AdministradorService(AdministradorRepo repo, SenhaHasher has
     }
 
     /// <summary>Cria o primeiro administrador a partir da configuração, se ainda não existir nenhum.</summary>
-    public async Task<bool> GarantirAdminInicialAsync(AdminInicialOptions opcoes, CancellationToken ct)
+    public async Task<bool> GarantirAdminInicialAsync(AdminInicialOptions opcoes, CancellationToken ct = default)
     {
-        if (await repo.ExisteAlgumAsync(ct)) return false;
+        if (await query.ExisteAlgumAsync(ct)) return false;
         if (string.IsNullOrWhiteSpace(opcoes.Email) || string.IsNullOrWhiteSpace(opcoes.Senha)) return false;
 
         repo.Adicionar(Administrador.Criar(opcoes.Nome, opcoes.Email, hasher.Gerar(opcoes.Senha)));

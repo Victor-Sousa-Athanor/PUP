@@ -6,5 +6,6 @@ obj/
 .idea/
 appsettings.*.local.json
 TestResults/
+dist/
 # Sobras de edição pelo Cowork (podem ser apagadas)
 .fuse_hidden*
