@@ -4,6 +4,7 @@ using Pup.Domain.Acesso;
 using Pup.Domain.Coleta;
 using Pup.Domain.Comunicados;
 using Pup.Domain.Intervencoes;
+using Pup.Domain.Paginas;
 using Pup.Domain.Regioes;
 
 namespace Pup.Data;
@@ -20,6 +21,7 @@ public sealed class AppDbContext(DbContextOptions<AppDbContext> options) : DbCon
     public DbSet<AtualizacaoIntervencao> AtualizacoesIntervencao => Set<AtualizacaoIntervencao>();
     public DbSet<Comunicado> Comunicados => Set<Comunicado>();
     public DbSet<Administrador> Administradores => Set<Administrador>();
+    public DbSet<Pagina> Paginas => Set<Pagina>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

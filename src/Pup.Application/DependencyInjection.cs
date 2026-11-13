@@ -7,6 +7,7 @@ using Pup.Application.Features.Coleta;
 using Pup.Application.Features.Comunicados;
 using Pup.Application.Features.Inicializacao;
 using Pup.Application.Features.Intervencoes;
+using Pup.Application.Features.Paginas;
 using Pup.Application.Features.Painel;
 using Pup.Application.Features.PontosDescarte;
 using Pup.Application.Features.Portal;
@@ -31,6 +32,7 @@ public static class DependencyInjection
         services.AddScoped<AtualizacaoIntervencaoService>();
         services.AddScoped<ComunicadoService>();
         services.AddScoped<AdministradorService>();
+        services.AddScoped<PaginaService>();
         services.AddScoped<PainelService>();
         services.AddScoped<PortalService>();
         services.AddScoped<BancoService>();

@@ -135,6 +135,7 @@
         <button type="button" class="admin-tab" role="tab" id="tab-btn-manutencao" aria-selected="false" aria-controls="panel-manutencao" data-tab="manutencao">Manutenção</button>
         <button type="button" class="admin-tab" role="tab" id="tab-btn-comunicados" aria-selected="false" aria-controls="panel-comunicados" data-tab="comunicados">Comunicados</button>
         <button type="button" class="admin-tab" role="tab" id="tab-btn-regioes" aria-selected="false" aria-controls="panel-regioes" data-tab="regioes">Regiões</button>
+        <button type="button" class="admin-tab" role="tab" id="tab-btn-paginas" aria-selected="false" aria-controls="panel-paginas" data-tab="paginas">Páginas e Rotas</button>
       </div>
 
       <!-- ABA COLETA E PONTOS DE DESCARTE -->
@@ -475,6 +476,56 @@
         <div class="admin-card">
           <h3>Regiões cadastradas</h3>
           <div id="lista-regioes" class="admin-list"></div>
+        </div>
+      </section>
+
+      <!-- ABA PÁGINAS E ROTAS -->
+      <section class="admin-panel" id="panel-paginas" role="tabpanel" aria-labelledby="tab-btn-paginas" hidden>
+        <div class="admin-card">
+          <div class="section-head">
+            <h2 id="pagina-form-title">Nova página / rota</h2>
+            <a class="text-link" href="/index.html" target="_blank" rel="noopener">Ver menu no portal ↗</a>
+          </div>
+          <form id="form-pagina" class="admin-form">
+            <input type="hidden" id="pagina-id">
+            <label class="field">
+              <span class="field-label">Título no menu e página *</span>
+              <input id="pagina-titulo" type="text" maxlength="80" required placeholder="Ex.: Telefones Úteis">
+            </label>
+            <label class="field">
+              <span class="field-label">Rota (URL sem barra inicial) *</span>
+              <input id="pagina-rota" type="text" maxlength="120" required placeholder="Ex.: telefones-uteis">
+            </label>
+            <label class="field">
+              <span class="field-label">Ordem no menu *</span>
+              <input id="pagina-ordem" type="number" min="0" value="10" required>
+            </label>
+            <label class="field">
+              <span class="field-label">Fonte oficial (URL opcional)</span>
+              <input id="pagina-fonte" type="url" maxlength="500" placeholder="https://www.sjc.sp.gov.br/...">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Resumo (subtítulo opcional)</span>
+              <input id="pagina-resumo" type="text" maxlength="300" placeholder="Breve descrição exibida no topo da página">
+            </label>
+            <label class="field field-full">
+              <span class="field-label">Conteúdo da página (parágrafos separados por linha em branco; itens com '- ')</span>
+              <textarea id="pagina-conteudo" rows="6" maxlength="8000" placeholder="Escreva o conteúdo da nova página..."></textarea>
+            </label>
+            <div class="field field-full admin-checkbox-grid">
+              <label class="admin-checkbox-item"><input id="pagina-menu" type="checkbox" checked> Exibir no menu superior</label>
+              <label class="admin-checkbox-item"><input id="pagina-publicada" type="checkbox" checked> Página publicada (acessível na rota)</label>
+            </div>
+            <div class="field-full admin-actions">
+              <button type="submit" class="button button-primary" id="pagina-submit">Salvar página</button>
+              <button type="button" class="button button-secondary" id="pagina-cancelar" hidden>Cancelar edição</button>
+            </div>
+          </form>
+        </div>
+
+        <div class="admin-card">
+          <h3>Páginas e rotas cadastradas</h3>
+          <div id="lista-paginas" class="admin-list"></div>
         </div>
       </section>
     </section>

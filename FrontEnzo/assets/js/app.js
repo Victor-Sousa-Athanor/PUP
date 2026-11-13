@@ -26,9 +26,46 @@
     });
   }
 
+  async function loadDynamicMenu(nav) {
+    const toggle = nav.querySelector(".menu-toggle");
+    const base = (root.PUP && root.PUP.apiBase) || "";
+    try {
+      const resp = await fetch(`${base}/api/paginas/menu`, { headers: { Accept: "application/json" } });
+      if (!resp.ok) return;
+      const itens = await resp.json();
+      if (!Array.isArray(itens) || !itens.length) return;
+
+      const atual = window.location.pathname.replace(/^\/+|\/+$/g, "").toLowerCase() || "index.html";
+      const links = itens.map((item) => {
+        const a = document.createElement("a");
+        const rota = String(item.rota || "").replace(/^\/+/, "");
+        a.href = `/${rota}`;
+        a.textContent = item.titulo;
+        if (atual === rota.toLowerCase()) a.setAttribute("aria-current", "page");
+        return a;
+      });
+
+      if (document.body.dataset.page === "admin") {
+        const adminLink = document.createElement("a");
+        adminLink.href = "/admin.html";
+        adminLink.textContent = "Administração";
+        adminLink.setAttribute("aria-current", "page");
+        links.push(adminLink);
+      }
+
+      nav.replaceChildren(...links);
+      if (toggle) nav.append(toggle);
+    } catch {
+      // Mantém os links estáticos do HTML se a API estiver indisponível.
+    }
+  }
+
   async function start() {
     const menuButton = document.querySelector(".menu-toggle");
     const nav = document.querySelector("#main-nav");
+    root.PUP = root.PUP || {};
+    root.PUP.refreshMenu = () => (nav ? loadDynamicMenu(nav) : Promise.resolve());
+    if (nav) await loadDynamicMenu(nav);
     if (menuButton && nav) {
       const menuLabel = menuButton.querySelector(".sr-only");
       menuButton.addEventListener("click", () => {

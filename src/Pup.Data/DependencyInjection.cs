@@ -5,6 +5,7 @@ using Pup.Data.AtualizacoesIntervencao;
 using Pup.Data.Coleta;
 using Pup.Data.Comunicados;
 using Pup.Data.Intervencoes;
+using Pup.Data.Paginas;
 using Pup.Data.PontosDescarte;
 using Pup.Data.Regioes;
 
@@ -24,6 +25,7 @@ public static class DependencyInjection
         services.AddScoped<AtualizacaoIntervencaoRepo>();
         services.AddScoped<ComunicadoRepo>();
         services.AddScoped<AdministradorRepo>();
+        services.AddScoped<PaginaRepo>();
         services.AddScoped<BancoRepo>();
 
         // Queries (leitura simples por entidade)
@@ -34,6 +36,7 @@ public static class DependencyInjection
         services.AddScoped<AtualizacaoIntervencaoQuery>();
         services.AddScoped<ComunicadoQuery>();
         services.AddScoped<AdministradorQuery>();
+        services.AddScoped<PaginaQuery>();
 
         return services;
     }

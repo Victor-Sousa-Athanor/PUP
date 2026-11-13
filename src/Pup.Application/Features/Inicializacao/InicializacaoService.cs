@@ -2,6 +2,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Pup.Application.Comum;
 using Pup.Application.Features.Acesso;
+using Pup.Application.Features.Paginas;
 using Pup.Application.Features.Regioes;
 
 namespace Pup.Application.Features.Inicializacao;
@@ -11,6 +12,7 @@ public sealed class InicializacaoService(
     BancoService banco,
     AdministradorService administradores,
     RegiaoService regioes,
+    PaginaService paginas,
     DadosExemplo exemplos,
     IOptions<PupOptions> options,
     ILogger<InicializacaoService> logger)
@@ -30,5 +32,7 @@ public sealed class InicializacaoService(
             await exemplos.SemearAsync(ct);
             logger.LogInformation("Dados de exemplo de São Francisco Xavier criados.");
         }
+
+        await paginas.SemearPadraoAsync(ct);
     }
 }

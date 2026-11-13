@@ -20,6 +20,19 @@ public static class FrontEstaticoExtensoes
 
         var arquivosFront = new PhysicalFileProvider(caminhoFront);
         var tipos = CriarTiposPermitidos();
+        var paginaDinamica = Path.Combine(caminhoFront, "pagina.html");
+
+        app.Use(async (ctx, next) =>
+        {
+            await next();
+            if (ctx.Response.StatusCode == 404 && !ctx.Response.HasStarted &&
+                EhRotaPaginaDinamica(ctx.Request) && File.Exists(paginaDinamica))
+            {
+                ctx.Response.StatusCode = StatusCodes.Status200OK;
+                ctx.Response.ContentType = "text/html; charset=utf-8";
+                await ctx.Response.SendFileAsync(paginaDinamica);
+            }
+        });
 
         app.UseDefaultFiles(new DefaultFilesOptions { FileProvider = arquivosFront });
         app.UseStaticFiles(new StaticFileOptions
@@ -55,5 +68,16 @@ public static class FrontEstaticoExtensoes
         tipos.Mappings[".ico"] = "image/x-icon";
         tipos.Mappings[".woff2"] = "font/woff2";
         return tipos;
+    }
+
+    private static bool EhRotaPaginaDinamica(HttpRequest req)
+    {
+        if (!HttpMethods.IsGet(req.Method)) return false;
+        var path = req.Path;
+        if (path == "/" || Path.HasExtension(path.Value)) return false;
+        return !path.StartsWithSegments("/api")
+            && !path.StartsWithSegments("/swagger")
+            && !path.StartsWithSegments("/openapi")
+            && !path.StartsWithSegments("/health");
     }
 }

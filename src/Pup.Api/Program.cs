@@ -42,7 +42,7 @@ builder.Services.AddExceptionHandler<TratamentoErros>();
 builder.Services.AddProblemDetails();
 builder.Services.AddControllers()
     .AddJsonOptions(o => o.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()));
-builder.Services.AddOpenApi();
+builder.Services.AdicionarSwagger();
 
 var app = builder.Build();
 
@@ -50,7 +50,7 @@ await using (var scope = app.Services.CreateAsyncScope())
     await scope.ServiceProvider.GetRequiredService<InicializacaoService>().ExecutarAsync();
 
 app.UseExceptionHandler();
-if (app.Environment.IsDevelopment()) app.MapOpenApi();
+if (app.Environment.IsDevelopment()) app.UsarSwagger();
 if (!app.Environment.IsDevelopment()) app.UseHttpsRedirection();
 
 app.UsarFrontEstatico(cfg);

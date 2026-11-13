@@ -670,6 +670,92 @@
     });
   }
 
+  // ---- Páginas e Rotas ----
+  let cachePaginas = [];
+
+  async function carregarPaginas() {
+    cachePaginas = await api("/api/paginas");
+    renderListaPaginas();
+  }
+
+  function renderListaPaginas() {
+    const box = $("#lista-paginas");
+    if (!cachePaginas.length) {
+      box.replaceChildren(el("p", "empty-state", "Nenhuma página cadastrada."));
+      return;
+    }
+    box.replaceChildren(...cachePaginas.map((p) => {
+      const item = el("article", "admin-item");
+      const topo = el("div", "admin-item-header");
+      const badge = p.publicada ? "Publicada" : "Rascunho";
+      const cls = p.publicada ? "status-concluído" : "status-cancelado";
+      topo.append(el("strong", "", `${p.titulo} (/${p.rota})`), el("span", `status ${cls}`, badge));
+      const tipo = p.ehSistema ? "Fixa do sistema" : "Página dinâmica";
+      const menuTxt = p.exibirNoMenu ? "No menu" : "Oculta do menu";
+      const meta = el("p", "admin-item-meta", `Ordem: ${p.ordem} · ${tipo} · ${menuTxt}${p.resumo ? " · " + p.resumo : ""}`);
+      const acoes = el("div", "admin-actions");
+      const abrir = el("a", "button button-secondary button-sm", "Abrir ↗");
+      abrir.href = `/${p.rota}`;
+      abrir.target = "_blank";
+      abrir.rel = "noopener";
+      acoes.append(abrir, botao("Editar", "button-secondary", () => preencherFormPagina(p)));
+      if (!p.ehSistema) {
+        acoes.append(botao("Excluir", "button-danger", async () => {
+          if (!window.confirm(`Excluir a página '${p.titulo}' (/${p.rota})?`)) return;
+          try {
+            await api(`/api/paginas/${p.id}`, { method: "DELETE" });
+            await carregarPaginas();
+            if (root.PUP.refreshMenu) await root.PUP.refreshMenu();
+            feedback("Página removida.");
+          } catch (err) { feedback(err.message, "erro"); }
+        }));
+      }
+      item.append(topo, meta, acoes);
+      return item;
+    }));
+  }
+
+  function preencherFormPagina(p) {
+    $("#pagina-id").value = p ? p.id : "";
+    $("#pagina-titulo").value = p ? p.titulo : "";
+    $("#pagina-rota").value = p ? p.rota : "";
+    $("#pagina-rota").readOnly = Boolean(p && p.ehSistema);
+    $("#pagina-ordem").value = p ? p.ordem : 10;
+    $("#pagina-fonte").value = p && p.fonteOficialUrl ? p.fonteOficialUrl : "";
+    $("#pagina-resumo").value = p && p.resumo ? p.resumo : "";
+    $("#pagina-conteudo").value = p && p.conteudo ? p.conteudo : "";
+    $("#pagina-menu").checked = p ? Boolean(p.exibirNoMenu) : true;
+    $("#pagina-publicada").checked = p ? Boolean(p.publicada) : true;
+    $("#pagina-form-title").textContent = p ? `Editar página: ${p.titulo}` : "Nova página / rota";
+    $("#pagina-cancelar").hidden = !p;
+  }
+
+  function configurarFormPagina() {
+    $("#pagina-cancelar").addEventListener("click", () => preencherFormPagina(null));
+    $("#form-pagina").addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const id = $("#pagina-id").value;
+      const body = {
+        titulo: $("#pagina-titulo").value,
+        rota: $("#pagina-rota").value,
+        resumo: textoOuNulo($("#pagina-resumo").value),
+        conteudo: textoOuNulo($("#pagina-conteudo").value),
+        ordem: Number($("#pagina-ordem").value || 0),
+        exibirNoMenu: $("#pagina-menu").checked,
+        publicada: $("#pagina-publicada").checked,
+        fonteOficialUrl: textoOuNulo($("#pagina-fonte").value)
+      };
+      try {
+        if (id) await api(`/api/paginas/${id}`, { method: "PUT", body });
+        else await api("/api/paginas", { method: "POST", body });
+        preencherFormPagina(null);
+        await carregarPaginas();
+        if (root.PUP.refreshMenu) await root.PUP.refreshMenu();
+        feedback(id ? "Página atualizada com sucesso." : "Página criada com sucesso.");
+      } catch (err) { feedback(err.message, "erro"); }
+    });
+  }
+
   // ---- Abas, Sessão e Inicialização ----
   const gerObras = criarGerenciadorIntervencoes("Obra", "obra", "obra", "obras");
   const gerManutencao = criarGerenciadorIntervencoes("Manutencao", "manutencao", "manutenção", "manutenções");
@@ -681,7 +767,8 @@
       carregarPontos(),
       gerObras.carregar(),
       gerManutencao.carregar(),
-      carregarComunicados()
+      carregarComunicados(),
+      carregarPaginas()
     ]);
   }
 
@@ -746,6 +833,7 @@
     gerObras.configurar();
     gerManutencao.configurar();
     configurarFormComunicado();
+    configurarFormPagina();
 
     atualizarEstadoSessao();
     if (sessao && sessao.token) {
